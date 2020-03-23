@@ -19,7 +19,7 @@ class UserController extends Controller
             $validacion = User::where('email',$data['email'])->count();
 
             if($validacion > 0 ) {
-                return response()->json(['error'=>'Este correo electronico ya fue registrado anterior mente.'],400);
+                return response()->json(['error'=>true,'message'=>'Este correo electronico ya fue registrado anterior mente.'],201);
             }
 
             $client = User::create([
@@ -37,7 +37,7 @@ class UserController extends Controller
             ]);
         }
 
-        return response()->json(['error'=>'No autorizado'],401);
+        return response()->json(['error'=>'No autorizado'],201);
     }
 
     // funcion para iniciar sesión
@@ -58,7 +58,7 @@ class UserController extends Controller
                 $client->update();
 
                 return response()->json([
-                    'error'=>'false',
+                    'error'=>false,
                     'message' => 'Bienvenido al sistema',
                     'usuario' => $user,
                     'token' => $token
@@ -67,7 +67,7 @@ class UserController extends Controller
                 return response()->json([
                     'error'=>true,
                     'message' => 'Los datos proporcionados no coinciden con nuestra base de datos.'
-                ],400);
+                ],201);
             }
 
         }
