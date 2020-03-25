@@ -18,7 +18,7 @@ class ProductosController extends Controller
         if($user) {
 
             // $productos = Producto::paginate(10);
-            $productos = Producto::paginate(10);
+            $productos = Producto::paginate(30);
 
             return response()->json([
                 'error'=> false,
