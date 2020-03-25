@@ -21,7 +21,7 @@ $router->post('actualizar_perfil/{id}/{token}',['uses'=>'UserController@actualiz
 $router->get('/listado_productos/{id}/{token}',['uses'=>'ProductosController@list_products']);
 
 // 2.- Filtrar productos por categoria
-$router->get('/filtrar_cat/{id}/{token}',['uses'=>'ProductosController@filtrar_categoria']);
+$router->get('/filtrar_cat/{id}/{token}/{categoria}',['uses'=>'ProductosController@filtrar_categoria']);
 
 // 3.- filtrar productos por sucursal
 $router->get('filtrar_suc/{id}/{token}',['uses'=>'ProductosController@filtrar_sucursal']);

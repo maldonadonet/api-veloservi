@@ -17,6 +17,7 @@ class ProductosController extends Controller
 
         if($user) {
 
+            // $productos = Producto::paginate(10);
             $productos = Producto::paginate(10);
 
             return response()->json([
@@ -36,7 +37,7 @@ class ProductosController extends Controller
     }
 
     // Filtrar por categoria
-    public function filtrar_categoria(Request $request, $id, $token) {
+    public function filtrar_categoria(Request $request, $id, $token,$categoria) {
 
             $data = $request->json()->all();
 
@@ -44,7 +45,7 @@ class ProductosController extends Controller
 
             if($user) {
 
-                $productos = DB::table('productos')->where('categoria',$data['categoria'])->paginate(10);
+                $productos = DB::table('productos')->where('categoria',$categoria)->paginate(30);
 
                 return response()->json([
                     'error'=> false,
