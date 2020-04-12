@@ -64,7 +64,7 @@ class ProductosController extends Controller
     }
 
     // Filtrar productos por sucursal
-     public function filtrar_sucursal(Request $request, $id, $token) {
+     public function filtrar_sucursal(Request $request, $id, $token,$id_asociado) {
         
         $data = $request->json()->all();
 
@@ -72,7 +72,7 @@ class ProductosController extends Controller
 
             if($user) {
 
-                $productos = DB::table('productos')->where('usuario_id',$data['usuario_id'])->paginate(10);
+                $productos = DB::table('productos')->where('usuario_id',$id_asociado)->paginate(40);
 
                 return response()->json([
                     'error'=> false,
@@ -115,6 +115,58 @@ class ProductosController extends Controller
             }
 
         return response()->json(['error'=>'No autorizado'],401);
+    }
+
+    public function obtener_asociados(Request $request, $id, $token) {
+        $data = $request->json()->all();
+
+            $user = User::where('id',$id)->where('token',$token)->first();
+
+            if($user) {
+
+                $productos = DB::table('users')->where('tipo_usuario','asociado')->paginate(50);
+
+                return response()->json([
+                    'error'=> false,
+                    'data' => $productos,
+                    'code' => 201
+                ]);
+
+            }else{
+                return response()->json([
+                    'error'=>true,
+                    'message' => 'Datos errones, favor de cerrar sesión e iniciar nuevamente para actualizar los datos de conexión..'
+                ],400);
+            }
+
+        return response()->json(['error'=>'No autorizado'],401);   
+    }
+
+    public function productos_promocion(Request $request, $id, $token) {
+
+        $data = $request->json()->all();
+
+            $user = User::where('id',$id)->where('token',$token)->first();
+
+            if($user) {
+
+                $productos = DB::table('productos')->where('promocion',1)->paginate(50);
+
+                return response()->json([
+                    'error'=> false,
+                    'data' => $productos,
+                    'code' => 201
+                ]);
+
+            }else{
+                return response()->json([
+                    'error'=>true,
+                    'message' => 'Datos errones, favor de cerrar sesión e iniciar nuevamente para actualizar los datos de conexión..'
+                ],400);
+            }
+
+        return response()->json(['error'=>'No autorizado'],401);
+
     }
 
 }

@@ -24,7 +24,13 @@ $router->get('/listado_productos/{id}/{token}',['uses'=>'ProductosController@lis
 $router->get('/filtrar_cat/{id}/{token}/{categoria}',['uses'=>'ProductosController@filtrar_categoria']);
 
 // 3.- filtrar productos por sucursal
-$router->get('filtrar_suc/{id}/{token}',['uses'=>'ProductosController@filtrar_sucursal']);
+$router->get('filtrar_suc/{id}/{token}/{id_asociado}',['uses'=>'ProductosController@filtrar_sucursal']);
+
+// 3.- Obtener lista de asociados
+$router->get('obtener_asociados/{id}/{token}',['uses'=>'ProductosController@obtener_asociados']);	
+
+// 3.- Obtener los productos en Promocion
+$router->get('obtener_promociones/{id}/{token}',['uses'=>'ProductosController@productos_promocion']);	
 
 // 4.- busqueda de productos
 $router->get('buscar/{id}/{token}',['uses'=>'ProductosController@buscar']);
