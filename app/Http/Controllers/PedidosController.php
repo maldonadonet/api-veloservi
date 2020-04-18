@@ -14,24 +14,29 @@ class PedidosController extends Controller
 
     // Crear un nuevo pedido
     public function create(Request $request,$id,$token) {
-        $productos = "";
+
         if ( $request->isJson() ) {
+
             $user = User::where('id',$id)->where('token',$token)->first();
 
             if($user) {
-                $data = $request->json()->all();
-                $productos = explode(',',$data['productos']);
-                $cantidades = explode(',',$data['cantidades']);
-                $costos = explode(',',$data['costos']);
-                $cant = count($productos);
+                
+                $data = $request->json()->all();              
+
+                $cantidades = explode(",", $data['cantidades']);
+                $productos = explode(",", $data['ids']);
+                $proveedores = explode(",", $data['asociados']);
+                $costos = explode(",", $data['costos']);
+
+                $cant = count($cantidades);
 
                 $pedido = Pedido::create([
                     'usuario_id' => $user->id,
-                    'direccion_entrega' => $data['direccion_entrega'],
+                    'direccion_entrega' =>'S/N', # $data['direccion_entrega']
                     'fecha_pedido' => date('Y/m/d'),
-                    'monto' => $data['monto'],
+                    'monto' => $data['total'],
                     'estatus' => 'pendiente de revision',
-                    'tipo_pedido' => $data['asociado_id']
+                    'tipo_pedido' => '0'
                 ]);
 
                 for ($i=0; $i < $cant; $i++) {
@@ -100,8 +105,7 @@ class PedidosController extends Controller
                     'productos' => $data['productos'],
                     'total' => 0,
                     'estatus' => 'pendiente de revision',
-                    'dir_cliente' => $data['dir_cliente'],
-                    'dir_alterna' => $data['dir_alterna'],
+                    'dir_entrega' => $data['dir_entrega'],
                     'usuario_id' => $id
                 ]);
 
