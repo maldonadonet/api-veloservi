@@ -20,8 +20,8 @@ class PedidosController extends Controller
             $user = User::where('id',$id)->where('token',$token)->first();
 
             if($user) {
-                
-                $data = $request->json()->all();              
+
+                $data = $request->json()->all();
 
                 $cantidades = explode(",", $data['cantidades']);
                 $productos = explode(",", $data['ids']);
@@ -67,32 +67,31 @@ class PedidosController extends Controller
 
     // Obtener el historial de pedidos de un usuario
     public function historial(Request $request,$id,$token) {
-        if ( $request->isJson() ) {
-            $user = User::where('id',$id)->where('token',$token)->first();
 
-            if($user) {
-                $data = $request->json()->all();
+        $user = User::where('id',$id)->where('token',$token)->first();
 
-                $pedidos = Pedido::where('usuario_id',$id)->get();
+        if($user) {
 
-                return response()->json([
-                    'error'=> false,
-                    'code' => 201,
-                    'pedido_especial' => $pedidos
-                ]);
+            $data = $request->json()->all();
 
-            }else{
-                return response()->json(['error'=>'Datos de usuario no validos, favor de iniciar sesion de nuevo'],401);
-            }
+            $pedidos = Pedido::where('usuario_id',$id)->orderBy('created_at','desc')->get();
 
+            return response()->json([
+                'error'=> false,
+                'code' => 201,
+                'pedidos' => $pedidos
+            ]);
+
+        }else{
+            return response()->json(['error'=>'Datos de usuario no validos, favor de iniciar sesion de nuevo'],401);
         }
+        
 
-        return response()->json(['error'=>'No autorizado'],401);
     }
 
     // Crea un nuevo pedido especial
     public function create_especial(Request $request,$id,$token) {
-         
+
         if ( $request->isJson() ) {
             $user = User::where('id',$id)->where('token',$token)->first();
 
