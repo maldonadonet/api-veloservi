@@ -8,6 +8,7 @@ use App\PedidoEsp;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use DB;
 
 class PedidosController extends Controller
 {
@@ -76,6 +77,60 @@ class PedidosController extends Controller
 
             $pedidos = Pedido::where('usuario_id',$id)->orderBy('created_at','desc')->get();
 
+            $pedidos2 = DB::table('pedidos as p')
+            ->join('users as u','p.usuario_id','=','u.id')
+            ->select('p.id','u.nombre','p.direccion_entrega','p.fecha_pedido','p.monto','p.estatus')
+            ->where('p.usuario_id',$id)
+            ->orderBy('p.created_at','desc')
+            ->get();
+
+            $ordenes = array();
+
+            foreach ($pedidos2 as $key => $value) {
+                
+                $query_detalle = DB::table('detalle_pedido as dp')
+                ->join('productos as p','dp.producto_id','=','p.id')
+                ->select('dp.id','dp.pedido_id as pedido','p.nombre','dp.cantidad','dp.costo')
+                ->where('dp.pedido_id',$value->id)->get();
+
+                $orden = array(
+                    'id_pedido' => $value->id,
+                    'nombre' => $value->nombre,
+                    'direccion_entrega' => $value->direccion_entrega,
+                    'fecha_pedido' => $value->fecha_pedido,
+                    'monto' => $value->monto,
+                    'estatus' => $value->estatus,
+                    'detalle' => $query_detalle
+                );
+
+                array_push($ordenes, $orden);
+
+            }
+
+            return response()->json([
+                'error'=> false,
+                'code' => 201,
+                'pedidos' => $ordenes
+            ]);
+
+        }else{
+            return response()->json(['error'=>'Datos de usuario no validos, favor de iniciar sesion de nuevo'],401);
+        }
+
+
+    }
+
+    // Obtener el historial de pedidos de un usuario
+    public function historialEspeciles(Request $request,$id,$token) {
+
+        $user = User::where('id',$id)->where('token',$token)->first();
+
+        if($user) {
+
+            $data = $request->json()->all();
+
+            $pedidos = PedidoEsp::where('usuario_id',$id)->orderBy('created_at','desc')->get();
+
             return response()->json([
                 'error'=> false,
                 'code' => 201,
@@ -85,9 +140,12 @@ class PedidosController extends Controller
         }else{
             return response()->json(['error'=>'Datos de usuario no validos, favor de iniciar sesion de nuevo'],401);
         }
-        
+
 
     }
+
+
+
 
     // Crea un nuevo pedido especial
     public function create_especial(Request $request,$id,$token) {
@@ -122,5 +180,7 @@ class PedidosController extends Controller
 
         return response()->json(['error'=>'No autorizado'],401);
     }
+
+    // Envía los detalles de cada pedido
 
 }

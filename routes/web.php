@@ -27,10 +27,10 @@ $router->get('/filtrar_cat/{id}/{token}/{categoria}',['uses'=>'ProductosControll
 $router->get('filtrar_suc/{id}/{token}/{id_asociado}',['uses'=>'ProductosController@filtrar_sucursal']);
 
 // 3.- Obtener lista de asociados
-$router->get('obtener_asociados/{id}/{token}',['uses'=>'ProductosController@obtener_asociados']);	
+$router->get('obtener_asociados/{id}/{token}',['uses'=>'ProductosController@obtener_asociados']);
 
 // 3.- Obtener los productos en Promocion
-$router->get('obtener_promociones/{id}/{token}',['uses'=>'ProductosController@productos_promocion']);	
+$router->get('obtener_promociones/{id}/{token}',['uses'=>'ProductosController@productos_promocion']);
 
 // 4.- busqueda de productos
 $router->get('buscar/{id}/{token}',['uses'=>'ProductosController@buscar']);
@@ -44,8 +44,14 @@ $router->post('/crear_pedido/{id}/{token}',['uses'=>'PedidosController@create'])
 // 2.- Ver el listado de pedidos de un usuario
 $router->get('/historial_pedidos/{id}/{token}',['uses'=>'PedidosController@historial']);
 
+// 2.- Ver el listado de pedidos especiales
+$router->get('/historial_pedidos_especiales/{id}/{token}',['uses'=>'PedidosController@historialEspeciles']);
+
 // 3.- Crear un pedido especial
 $router->post('/crear_pedido_especial/{id}/{token}',['uses'=>'PedidosController@create_especial']);
+
+// 4.- Detalle de pedidos list
+$router->post('/listar_pedidos/{id}/{token}',['uses'=>'PedidosController@listar_pedidos']);
 
 
 
