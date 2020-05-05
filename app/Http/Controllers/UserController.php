@@ -15,7 +15,7 @@ class UserController extends Controller
         if($request->isJson()) {
 
             $data = $request->json()->all();
-            
+
             $validacion = User::where('email',$data['email'])->count();
 
             if($validacion > 0 ) {
@@ -81,7 +81,7 @@ class UserController extends Controller
     public function perfil(Request $request,$id,$token) {
 
         if ($request->isJson() ) {
-            
+
 
             $user = User::where('id',$id)->where('token',$token)->first();
 
@@ -124,6 +124,8 @@ class UserController extends Controller
                 $client->cuidad = $data['cuidad'] == null ? $client->cuidad : $data['cuidad'];
                 $client->telefono = $data['telefono'] == null ? $client->telefono : $data['telefono'];
                 $client->dni = $data['dni'] == null ? $client->dni : $data['dni'];
+                $client->email = $data['email'] == null ? $client->email : $data['email'];
+                $client->password = $data['password'] == null ? $client->password : $data['password'];
                 $client->img_perfil = $data['img_perfil'] == null ? $client->img_perfil : $data['img_perfil'];
                 $client->update();
 

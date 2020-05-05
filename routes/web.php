@@ -53,7 +53,11 @@ $router->post('/crear_pedido_especial/{id}/{token}',['uses'=>'PedidosController@
 // 4.- Detalle de pedidos list
 $router->post('/listar_pedidos/{id}/{token}',['uses'=>'PedidosController@listar_pedidos']);
 
+// 2.- Ver el listado de pedidos de un repartidor
+$router->get('/historial_pedidos_repartidor/{id}/{token}',['uses'=>'PedidosController@historial_repartidor']);
 
+// 2.- Ver el listado de pedidos Especiales de un repartidor
+$router->get('/historial_pedidos_especiales_repartidor/{id}/{token}',['uses'=>'PedidosController@historial_especiales_repartidor']);
 
 
 
